@@ -14,7 +14,7 @@ const char* WIFI_SSID = ".@LICEC-Student-WiFi";
 const char* WIFI_PASS = "";
 
 // ─── Backend ─────────────────────────────────────────────
-const char* SERVER_URL    = "https://smart-bin.vercel.app";   // เช่น https://smart-bin.vercel.app
+const char* SERVER_URL    = "https://smart-bin-enlic.vercel.app";   // เช่น https://smart-bin.vercel.app
 const char* DEVICE_SECRET = "B_IoulTaElgIHet3qWMtC3sa";        // ตรงกับ .env DEVICE_SECRET
 
 // ─── Pin Map (ถัง 4 ใบ) ─────────────────────────────────
