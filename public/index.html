@@ -150,8 +150,14 @@ async function refresh(){
     const d = await r.json();
     renderBins(d.bins||[]);
     renderLogs(d.logs||[]);
-    setConn(true);
-  } catch{ setConn(false); }
+    // เช็คว่า Pico ออนไลน์จริงจาก device_last_seen ของถังใดก็ได้
+    const picoOnline = (d.bins||[]).some(b => {
+      if(!b.device_last_seen) return false;
+      const seenAgo = (Date.now() - new Date(b.device_last_seen).getTime()) / 1000;
+      return seenAgo < 15; // ถือว่าออนไลน์ถ้าเห็นภายใน 15 วินาที
+    });
+    setConn(true, picoOnline);
+  } catch{ setConn(false, false); }
 }
 
 async function apiPost(action, payload){
@@ -164,9 +170,19 @@ function setThreshold(id, val){ apiPost('set_threshold',{id, threshold_cm: parse
 function manualLid(id, open){ apiPost('manual_lid',{id, open}); }
 function setAllMode(m){ apiPost('set_all_mode', m); }
 
-function setConn(ok){
-  document.getElementById('dot').className = 'w-2 h-2 rounded-full '+(ok?'bg-emerald-500':'bg-red-400');
-  document.getElementById('dotTxt').textContent = ok?'เชื่อมต่อแล้ว':'ไม่ได้เชื่อมต่อ';
+function setConn(apiOk, picoOnline){
+  const dot = document.getElementById('dot');
+  const txt = document.getElementById('dotTxt');
+  if(!apiOk){
+    dot.className = 'w-2 h-2 rounded-full bg-red-400';
+    txt.textContent = 'API ไม่ตอบ';
+  } else if(picoOnline){
+    dot.className = 'w-2 h-2 rounded-full bg-emerald-500';
+    txt.textContent = 'Pico ออนไลน์';
+  } else {
+    dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+    txt.textContent = 'Pico ออฟไลน์';
+  }
 }
 
 function renderBins(bins){
