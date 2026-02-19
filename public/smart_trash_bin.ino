@@ -14,8 +14,8 @@
 WiFiClientSecure client;
 
 // ─── WiFi ────────────────────────────────────────────────
-const char* WIFI_SSID = ".@LICEC-Student-WiFi";
-const char* WIFI_PASS = "";
+const char* WIFI_SSID = ".@LICEC-WiFi";
+const char* WIFI_PASS = "054583117";
 
 // ─── Backend ─────────────────────────────────────────────
 const char* SERVER_URL    = "https://smart-bin-enlic.vercel.app";   // เช่น https://smart-bin.vercel.app
@@ -105,8 +105,15 @@ void syncWithServer() {
         int id = b["id"].as<int>() - 1;        // 0-based
         if (id < 0 || id >= 4) continue;
         binMode[id]    = b["mode"].as<String>();
-        threshold[id]  = b["threshold_cm"].as<float>();
+        
+        // ถ้า threshold <= 0 หรือ > 200 ให้ใช้ค่า default 30
+        float thr = b["threshold_cm"].as<float>();
+        threshold[id]  = (thr > 0 && thr <= 200) ? thr : 30.0;
+        
         manualOpen[id] = b["manual_open"].as<bool>();
+        // Debug: แสดงค่าที่รับมาจาก server
+        Serial.printf("  -> B%d mode=%s thr=%.0f manual=%d\n", 
+                      id+1, binMode[id].c_str(), threshold[id], manualOpen[id]);
       }
     }
     Serial.println("Sync OK");
