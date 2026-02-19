@@ -15,7 +15,7 @@ const char* WIFI_PASS = "";
 
 // ─── Backend ─────────────────────────────────────────────
 const char* SERVER_URL    = "https://smart-bin-enlic.vercel.app";   // เช่น https://smart-bin.vercel.app
-const char* DEVICE_SECRET = "B_IoulTaElgIHet3qWMtC3sa";        // ตรงกับ .env DEVICE_SECRET
+const char* DEVICE_SECRET = "BCyyH8VC3dR4fzHDP1RpcGfu";        // ตรงกับ .env DEVICE_SECRET
 
 // ─── Pin Map (ถัง 4 ใบ) ─────────────────────────────────
 //            Bin1  Bin2  Bin3  Bin4
